@@ -1,0 +1,95 @@
+{
+  "addons": [
+    {
+      "name": "Hooty Repository (Otaku)",
+      "type": "addon",
+      "section": false,
+      "plugin": "repository.hooty",
+      "url": "https://goldenfreddy0703.github.io/repository.hooty/repository.hooty-1.0.zip",
+      "repository": "",
+      "repositoryxml": "",
+      "repositoryurl": "",
+      "icon": "",
+      "adult": false,
+      "description": "Maintained repository for Otaku — the best dedicated anime Kodi addon."
+    },
+    {
+      "name": "Otaku",
+      "type": "addon",
+      "section": false,
+      "plugin": "plugin.video.otaku",
+      "url": "https://goldenfreddy0703.github.io/repository.hooty/",
+      "repository": "repository.hooty",
+      "repositoryxml": "https://goldenfreddy0703.github.io/repository.hooty/addons.xml",
+      "repositoryurl": "https://goldenfreddy0703.github.io/repository.hooty/",
+      "icon": "",
+      "adult": false,
+      "description": "Anime movies and series with sub/dub, airing calendar, skip intro support."
+    },
+    {
+      "name": "Otaku Context Menu",
+      "type": "addon",
+      "section": false,
+      "plugin": "context.otaku",
+      "url": "https://goldenfreddy0703.github.io/repository.hooty/",
+      "repository": "repository.hooty",
+      "repositoryxml": "https://goldenfreddy0703.github.io/repository.hooty/addons.xml",
+      "repositoryurl": "https://goldenfreddy0703.github.io/repository.hooty/",
+      "icon": "",
+      "adult": false,
+      "description": "Right-click context menu for Otaku (watchlist, mark watched, etc.)."
+    },
+    {
+      "name": "G-Source Repository (WatchNixtoons2)",
+      "type": "addon",
+      "section": false,
+      "plugin": "repository.wnt2",
+      "url": "https://mrgsi.github.io/gsource/repository.wnt2-1.0.0.zip",
+      "repository": "",
+      "repositoryxml": "",
+      "repositoryurl": "",
+      "icon": "",
+      "adult": false,
+      "description": "Repository hosting WatchNixtoons2."
+    },
+    {
+      "name": "WatchNixtoons2",
+      "type": "addon",
+      "section": false,
+      "plugin": "plugin.video.watchnixtoons2",
+      "url": "https://mrgsi.github.io/gsource/",
+      "repository": "repository.wnt2",
+      "repositoryxml": "https://mrgsi.github.io/gsource/addons.xml",
+      "repositoryurl": "https://mrgsi.github.io/gsource/",
+      "icon": "",
+      "adult": false,
+      "description": "Free anime streaming — wide catalogue of subbed and dubbed series and movies."
+    },
+    {
+      "name": "The Crew Repository (Fanime F)",
+      "type": "addon",
+      "section": false,
+      "plugin": "repository.thecrew",
+      "url": "https://team-crew.github.io/repository.thecrew-0.3.8.zip",
+      "repository": "",
+      "repositoryxml": "",
+      "repositoryurl": "",
+      "icon": "",
+      "adult": false,
+      "description": "Repository hosting Fanime F and other addons."
+    },
+    {
+      "name": "Fanime F",
+      "type": "addon",
+      "section": false,
+      "plugin": "plugin.video.fanime",
+      "url": "https://team-crew.github.io/",
+      "repository": "repository.thecrew",
+      "repositoryxml": "https://team-crew.github.io/addons.xml",
+      "repositoryurl": "https://team-crew.github.io/",
+      "icon": "",
+      "adult": false,
+      "description": "Free anime addon — additional source coverage alongside Otaku and WatchNixtoons2."
+    }
+  ]
+}

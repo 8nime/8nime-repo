@@ -1,0 +1,66 @@
+name: Update Addon Metadata
+
+on:
+  repository_dispatch:
+    types: [addon-released]
+  workflow_dispatch:
+    inputs:
+      addon_id:
+        description: 'Addon ID (e.g. plugin.program.8nime.wizard)'
+        required: true
+      version:
+        description: 'New version (e.g. 1.0.1)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve inputs
+        id: in
+        run: |
+          echo "addon_id=${{ github.event.client_payload.addon_id || github.event.inputs.addon_id }}" >> "$GITHUB_OUTPUT"
+          echo "version=${{ github.event.client_payload.version || github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Update addons-skins.json
+        if: steps.in.outputs.addon_id == 'plugin.video.8nime.bingie.helper'
+        run: |
+          sed -i "s|${{ steps.in.outputs.addon_id }}-[0-9][^\"]*\.zip|${{ steps.in.outputs.addon_id }}-${{ steps.in.outputs.version }}.zip|g" hosted/addons-skins.json
+
+      - name: Update builds.txt
+        if: steps.in.outputs.addon_id == 'plugin.program.8nime.wizard'
+        run: |
+          sed -i "s|${{ steps.in.outputs.addon_id }}-[0-9][^\"]*\.zip|${{ steps.in.outputs.addon_id }}-${{ steps.in.outputs.version }}.zip|g" hosted/builds.txt
+
+      - name: Commit hosted metadata
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add hosted/
+          git diff --cached --quiet || (git commit -m "chore: ${{ steps.in.outputs.addon_id }} ${{ steps.in.outputs.version }}" && git push)
+
+      - name: Regenerate addons.xml in 8nime.github.io from released addon.xml
+        env:
+          GH_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          ADDON_ID="${{ steps.in.outputs.addon_id }}"
+          VERSION="${{ steps.in.outputs.version }}"
+          # Pull the actual addon.xml that shipped inside the released zip so the
+          # repo index stays a faithful copy of the manifest (version + requires +
+          # extension points), not just a version-number patch.
+          gh release download "$ADDON_ID" --repo 8nime/8nime-repo \
+            --pattern "${ADDON_ID}-${VERSION}.zip" --dir . --clobber
+          unzip -o "${ADDON_ID}-${VERSION}.zip" "${ADDON_ID}/addon.xml" -d extracted
+          git clone "https://x-access-token:${GH_TOKEN}@github.com/8nime/8nime.github.io.git" pages
+          python3 scripts/regen-addons-xml.py "$ADDON_ID" "extracted/${ADDON_ID}/addon.xml" pages/addons.xml
+          cd pages
+          md5sum addons.xml | awk '{print $1}' > addons.xml.md5
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add addons.xml addons.xml.md5
+          git diff --cached --quiet || (git commit -m "chore: sync ${ADDON_ID} ${VERSION} into addons.xml" && git push)

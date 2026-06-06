@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addons>
+  <addon id="repository.8nime" name="8nime Repository" version="1.0.0" provider-name="8nime">
+    <extension point="xbmc.addon.repository" name="8nime Repository">
+      <dir>
+        <info compressed="false">https://8nime.github.io/8nime-repo/repo/addons.xml</info>
+        <checksum>https://8nime.github.io/8nime-repo/repo/addons.xml.md5</checksum>
+        <datadir zip="true">https://github.com/8nime/8nime-repo/releases/download/</datadir>
+      </dir>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+      <summary lang="en">Repository for 8nime Kodi build and wizard</summary>
+      <description lang="en">Hosts 8nimeWizard and the 8nime build with Bingie skin, Otaku, WatchNixtoons2, and Fanime F.</description>
+      <platform>all</platform>
+    </extension>
+  </addon>
+  <addon id="plugin.video.8nime.bingie.helper" name="8nime Bingie Helper" version="1.0.0" provider-name="8nime">
+    <requires>
+      <import addon="xbmc.python" version="3.0.1"/>
+      <import addon="script.module.requests" version="2.9.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="plugin.py">
+      <provides>video</provides>
+    </extension>
+    <extension point="xbmc.python.script" library="default.py"/>
+    <extension point="xbmc.service" library="service.py" start="startup"/>
+    <extension point="xbmc.addon.metadata">
+      <summary lang="en_GB">AniList lists and Bingie info for anime</summary>
+      <description lang="en_GB">Serves Bingie hub widgets, More Info panels, and metadata from AniList GraphQL. Playback hands off to Otaku, WatchNixtoons2, or Fanime F.</description>
+      <license>GPL-3.0-or-later</license>
+      <platform>all</platform>
+    </extension>
+  </addon>
+  <addon id="plugin.program.8nime.wizard" name="8nimeWizard" version="1.0.0" provider-name="8nime">
+    <requires>
+      <import addon="xbmc.python" version="2.1.0"/>
+      <import addon="script.module.requests"/>
+      <import addon="script.module.six"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+      <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.service" library="startup.py" start="startup"/>
+    <extension point="xbmc.addon.metadata">
+      <summary lang="en">Anime-focused Kodi build wizard</summary>
+      <description lang="en">Install and maintain the 8nime build with Bingie skin, Otaku, WatchNixtoons2, and Fanime F.</description>
+      <platform>all</platform>
+    </extension>
+  </addon>
+</addons>

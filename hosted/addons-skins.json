@@ -1,0 +1,43 @@
+{
+  "addons": [
+    {
+      "name": "Bingie Repository",
+      "type": "addon",
+      "section": false,
+      "plugin": "repository.bingie",
+      "url": "https://matke-84.github.io/repository.bingie/repository.bingie-1.0.0.zip",
+      "repository": "",
+      "repositoryxml": "",
+      "repositoryurl": "",
+      "icon": "",
+      "adult": false,
+      "description": "Official Bingie skin repository. Netflix-style Kodi UI."
+    },
+    {
+      "name": "Bingie Skin",
+      "type": "addon",
+      "section": false,
+      "plugin": "skin.bingie",
+      "url": "https://matke-84.github.io/repository.bingie/",
+      "repository": "repository.bingie",
+      "repositoryxml": "https://matke-84.github.io/repository.bingie/addons.xml",
+      "repositoryurl": "https://matke-84.github.io/repository.bingie/",
+      "icon": "",
+      "adult": false,
+      "description": "Lightweight Netflix-style Kodi skin with widget support."
+    },
+    {
+      "name": "8nime Bingie Helper",
+      "type": "addon",
+      "section": false,
+      "plugin": "plugin.video.8nime.bingie.helper",
+      "url": "https://github.com/8nime/8nime-repo/releases/download/plugin.video.8nime.bingie.helper/plugin.video.8nime.bingie.helper-1.0.0.zip",
+      "repository": "repository.8nime",
+      "repositoryxml": "https://8nime.github.io/8nime-repo/repo/addons.xml",
+      "repositoryurl": "https://8nime.github.io/8nime-repo/repo/",
+      "icon": "",
+      "adult": false,
+      "description": "Provides AniList widgets, More Info panels, and franchise/season mapping for the Bingie skin."
+    }
+  ]
+}
