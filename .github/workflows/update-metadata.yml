@@ -15,6 +15,12 @@ on:
 permissions:
   contents: write
 
+# Serialize runs: two addon releases dispatching at once would otherwise both
+# commit to main and one push would be rejected (non-fast-forward).
+concurrency:
+  group: update-metadata
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -42,7 +48,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add hosted/
-          git diff --cached --quiet || (git commit -m "chore: ${{ steps.in.outputs.addon_id }} ${{ steps.in.outputs.version }}" && git push)
+          git diff --cached --quiet || (git commit -m "chore: ${{ steps.in.outputs.addon_id }} ${{ steps.in.outputs.version }}" && (git pull --rebase && git push))
 
       - name: Regenerate repo/addons.xml from released addon.xml
         env:
@@ -63,4 +69,4 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add repo/addons.xml repo/addons.xml.md5
-          git diff --cached --quiet || (git commit -m "chore: sync ${ADDON_ID} ${VERSION} into repo/addons.xml" && git push)
+          git diff --cached --quiet || (git commit -m "chore: sync ${ADDON_ID} ${VERSION} into repo/addons.xml" && (git pull --rebase && git push))
