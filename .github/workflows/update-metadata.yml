@@ -44,7 +44,7 @@ jobs:
           git add hosted/
           git diff --cached --quiet || (git commit -m "chore: ${{ steps.in.outputs.addon_id }} ${{ steps.in.outputs.version }}" && git push)
 
-      - name: Regenerate addons.xml in 8nime.github.io from released addon.xml
+      - name: Regenerate repo/addons.xml from released addon.xml
         env:
           GH_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
@@ -52,15 +52,15 @@ jobs:
           VERSION="${{ steps.in.outputs.version }}"
           # Pull the actual addon.xml that shipped inside the released zip so the
           # repo index stays a faithful copy of the manifest (version + requires +
-          # extension points), not just a version-number patch.
+          # extension points), not just a version-number patch. The index is served
+          # via raw.githubusercontent.com/8nime/8nime-repo/main/repo/addons.xml
+          # (NOT GitHub Pages — Pages gzips the XML and Kodi's HTTP/2 fetch stalls).
           gh release download "$ADDON_ID" --repo 8nime/8nime-repo \
-            --pattern "${ADDON_ID}-${VERSION}.zip" --dir . --clobber
-          unzip -o "${ADDON_ID}-${VERSION}.zip" "${ADDON_ID}/addon.xml" -d extracted
-          git clone "https://x-access-token:${GH_TOKEN}@github.com/8nime/8nime.github.io.git" pages
-          python3 scripts/regen-addons-xml.py "$ADDON_ID" "extracted/${ADDON_ID}/addon.xml" pages/addons.xml
-          cd pages
-          md5sum addons.xml | awk '{print $1}' > addons.xml.md5
+            --pattern "${ADDON_ID}-${VERSION}.zip" --dir .dl --clobber
+          unzip -o ".dl/${ADDON_ID}-${VERSION}.zip" "${ADDON_ID}/addon.xml" -d .extracted
+          python3 scripts/regen-addons-xml.py "$ADDON_ID" ".extracted/${ADDON_ID}/addon.xml" repo/addons.xml
+          md5sum repo/addons.xml | awk '{print $1}' > repo/addons.xml.md5
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add addons.xml addons.xml.md5
-          git diff --cached --quiet || (git commit -m "chore: sync ${ADDON_ID} ${VERSION} into addons.xml" && git push)
+          git add repo/addons.xml repo/addons.xml.md5
+          git diff --cached --quiet || (git commit -m "chore: sync ${ADDON_ID} ${VERSION} into repo/addons.xml" && git push)
