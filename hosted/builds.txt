@@ -3,7 +3,7 @@ version="1.0.0"
 zip="https://github.com/8nime/8nime-repo/releases/download/plugin.program.8nime.wizard/plugin.program.8nime.wizard-1.3.0.zip"
 
 name="8nime"
-version="2026.06.08.1913"
+version="2026.06.08.1932"
 url="https://github.com/8nime/8nime-repo/releases/download/8nime-build/8nime.zip"
 minor="http://"
 gui="http://"
