@@ -15,7 +15,7 @@
     </extension>
   </addon>
   <addon id="plugin.video.8nime.bingie.helper"
-         version="1.5.0"
+         version="1.6.0"
          name="8nime Bingie Helper"
          provider-name="8nime">
     <requires>
@@ -26,7 +26,6 @@
       <provides>video</provides>
     </extension>
     <extension point="xbmc.python.script" library="default.py"/>
-    <extension point="xbmc.service" library="service.py" start="startup"/>
     <extension point="xbmc.addon.metadata">
       <summary lang="en_GB">AniList lists and Bingie info for anime</summary>
       <description lang="en_GB">Serves Bingie hub widgets, More Info panels, and metadata from AniList GraphQL. Playback hands off to Otaku, WatchNixtoons2, or Fanime F when you play an episode or movie.</description>
