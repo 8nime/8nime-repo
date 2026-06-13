@@ -43,13 +43,6 @@ jobs:
         run: |
           sed -i "s|${{ steps.in.outputs.addon_id }}-[0-9][^\"]*\.zip|${{ steps.in.outputs.addon_id }}-${{ steps.in.outputs.version }}.zip|g" hosted/builds.txt
 
-      - name: Commit hosted metadata
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add hosted/
-          git diff --cached --quiet || (git commit -m "chore: ${{ steps.in.outputs.addon_id }} ${{ steps.in.outputs.version }}" && (git pull --rebase && git push))
-
       - name: Regenerate repo/addons.xml from released addon.xml
         env:
           GH_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -66,7 +59,33 @@ jobs:
           unzip -o ".dl/${ADDON_ID}-${VERSION}.zip" "${ADDON_ID}/addon.xml" -d .extracted
           python3 scripts/regen-addons-xml.py "$ADDON_ID" ".extracted/${ADDON_ID}/addon.xml" repo/addons.xml
           md5sum repo/addons.xml | awk '{print $1}' > repo/addons.xml.md5
+
+      # Commit hosted metadata AND the repo index together in ONE commit so the
+      # two can never diverge (a half-done release that updated hosted/ but not
+      # repo/addons.xml is what broke before). The build pipeline pushes its own
+      # "8nime build ... [skip ci]" commits to this same main from OUTSIDE this
+      # workflow's concurrency group, so a plain `pull --rebase && push` loses a
+      # race between the pull and the push. Retry with a fresh rebase each time.
+      - name: Commit + push metadata
+        run: |
+          ADDON_ID="${{ steps.in.outputs.addon_id }}"
+          VERSION="${{ steps.in.outputs.version }}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add repo/addons.xml repo/addons.xml.md5
-          git diff --cached --quiet || (git commit -m "chore: sync ${ADDON_ID} ${VERSION} into repo/addons.xml" && (git pull --rebase && git push))
+          git add hosted/ repo/addons.xml repo/addons.xml.md5
+          if git diff --cached --quiet; then
+            echo "no metadata changes to commit"
+            exit 0
+          fi
+          git commit -m "chore: release ${ADDON_ID} ${VERSION} (hosted metadata + repo index)"
+          for attempt in $(seq 1 5); do
+            git pull --rebase --autostash || { git rebase --abort 2>/dev/null || true; }
+            if git push; then
+              echo "pushed on attempt ${attempt}"
+              exit 0
+            fi
+            echo "::warning::push attempt ${attempt} rejected (main advanced); retrying"
+            sleep $((attempt * 3))
+          done
+          echo "::error::failed to push metadata after 5 attempts"
+          exit 1
