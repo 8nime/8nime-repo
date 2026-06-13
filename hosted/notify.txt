@@ -1,4 +1,4 @@
-1
+2
 |||
 
-Welcome to 8nime! Your anime-focused Kodi build is ready. Open Otaku from the home menu and log into AniList in Otaku (Tools → Accounts) to enable My List and Continue Watching.
+Welcome to 8nime! Your anime-focused Kodi build is ready. In the 8nime Bingie Helper add-on settings, choose "Log in with AniList" and scan the QR code to enable My List and Continue Watching.
